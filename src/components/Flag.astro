@@ -1,0 +1,46 @@
+---
+import type { Lang } from "../i18n/content";
+
+interface Props {
+  lang: Lang;
+  class?: string;
+}
+const { lang, class: cls } = Astro.props;
+const id = `flag-clip-${lang}`;
+---
+
+{
+  lang === "es" ? (
+    <svg class={cls} viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+      <defs>
+        <clipPath id={id}>
+          <rect width="20" height="14" rx="2.5" />
+        </clipPath>
+      </defs>
+      <g clip-path={`url(#${id})`}>
+        <rect width="20" height="14" fill="#ffffff" />
+        <rect y="7" width="20" height="7" fill="#d52b1e" />
+        <rect width="7" height="7" fill="#0039a6" />
+        <path
+          d="M3.5 1.55 3.95 2.92 5.4 2.92 4.23 3.77 4.67 5.15 3.5 4.3 2.33 5.15 2.77 3.77 1.6 2.92 3.05 2.92Z"
+          fill="#ffffff"
+        />
+      </g>
+    </svg>
+  ) : (
+    <svg class={cls} viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+      <defs>
+        <clipPath id={id}>
+          <rect width="20" height="14" rx="2.5" />
+        </clipPath>
+      </defs>
+      <g clip-path={`url(#${id})`}>
+        <rect width="20" height="14" fill="#012169" />
+        <path d="M0 0 20 14M20 0 0 14" stroke="#ffffff" stroke-width="2.8" />
+        <path d="M0 0 20 14M20 0 0 14" stroke="#c8102e" stroke-width="1.4" />
+        <path d="M10 0V14M0 7H20" stroke="#ffffff" stroke-width="4" />
+        <path d="M10 0V14M0 7H20" stroke="#c8102e" stroke-width="2.2" />
+      </g>
+    </svg>
+  )
+}

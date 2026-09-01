@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f7f4ec"/>
+  <circle cx="1050" cy="80" r="260" fill="#c88a2e" opacity="0.14"/>
+  <circle cx="120" cy="560" r="230" fill="#1c3d30" opacity="0.12"/>
+  <text x="90" y="150" font-family="'DM Mono', monospace" font-size="26" letter-spacing="8" fill="#1c3d30">HRIS + NOMINA · CHILE</text>
+  <text x="86" y="300" font-family="Georgia, serif" font-size="96" font-weight="700" fill="#12130f">Cierra tu nomina</text>
+  <text x="86" y="410" font-family="Georgia, serif" font-size="96" font-style="italic" font-weight="300" fill="#c88a2e">en minutos, no en dias.</text>
+  <text x="90" y="520" font-family="Georgia, serif" font-size="34" font-weight="700" fill="#12130f">Mor<tspan fill="#1c3d30">fom</tspan></text>
+  <text x="90" y="560" font-family="'DM Sans', sans-serif" font-size="24" fill="#12130f" opacity="0.6">Nomina, asistencia y personas para empresas de Chile</text>
+</svg>

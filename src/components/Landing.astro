@@ -1,0 +1,456 @@
+---
+import { type Lang, content, languages, localizedPath } from "../i18n/content";
+import { APP_URL, LEADS_ENDPOINT } from "../config";
+import Flag from "./Flag.astro";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = content[lang];
+const altLang: Lang = lang === "es" ? "en" : "es";
+
+const navItems = [
+  { href: "#modulos", label: t.nav.modules },
+  { href: "#cumplimiento", label: t.nav.compliance },
+  { href: "#planes", label: t.nav.pricing },
+  { href: "#preguntas", label: t.nav.faq },
+];
+---
+
+<!-- ══ Header ══════════════════════════════════════════════════════ -->
+<header
+  id="site-header"
+  class="fixed inset-x-0 top-0 z-50 transition-colors duration-300"
+>
+  <div class="wrap flex items-center justify-between py-4">
+    <a href={localizedPath("/", lang)} class="font-display text-xl font-semibold tracking-tight">
+      Mor<span class="text-forest">fom</span>
+    </a>
+
+    <nav class="hidden items-center gap-8 lg:flex">
+      {
+        navItems.map((i) => (
+          <a href={i.href} class="link-underline font-mono text-xs uppercase tracking-[0.16em] text-ink/70 hover:text-ink">
+            {i.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a
+        href={localizedPath("/", altLang)}
+        class="flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.16em] text-ink/50 hover:text-ink"
+        aria-label={`Switch to ${languages[altLang]}`}
+      >
+        <Flag lang={altLang} class="h-3.5 w-5 shrink-0 rounded-[3px] ring-1 ring-ink/15" />
+        {altLang}
+      </a>
+      <span class="h-4 w-px bg-ink/20"></span>
+      <a href={`${APP_URL}/login`} class="font-mono text-xs uppercase tracking-[0.16em] text-ink/70 hover:text-ink">
+        {t.nav.login}
+      </a>
+      <a href="#demo" class="btn-solid !px-4 !py-2 text-[0.7rem]">{t.nav.cta}</a>
+    </div>
+  </div>
+  <div class="rule opacity-0 transition-opacity duration-300" id="header-rule"></div>
+</header>
+
+<main>
+  <!-- ══ Hero ═════════════════════════════════════════════════════ -->
+  <section class="grain relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
+    <div class="wrap relative grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr]">
+      <div>
+        <p class="eyebrow reveal">{t.hero.eyebrow}</p>
+        <h1 class="reveal mt-5 font-display text-[2.7rem] font-medium leading-[1.04] tracking-[-0.02em] sm:text-6xl md:text-[4.1rem]" style="transition-delay:60ms">
+          {t.hero.title}<br />
+          <span class="italic font-light text-gold">{t.hero.titleAccent}</span>
+        </h1>
+        <p class="reveal mt-7 max-w-prose text-lg leading-relaxed text-ink/75" style="transition-delay:120ms">
+          {t.hero.lead}
+        </p>
+        <div class="reveal mt-9 flex flex-wrap items-center gap-4" style="transition-delay:180ms">
+          <a href="#demo" class="btn-solid">{t.hero.ctaPrimary}</a>
+          <a href="#modulos" class="btn-ghost">{t.hero.ctaSecondary}</a>
+        </div>
+        <p class="reveal mt-6 font-mono text-xs uppercase tracking-[0.16em] text-ink/45" style="transition-delay:220ms">
+          {t.hero.note}
+        </p>
+      </div>
+
+      <!-- Illustrative payslip card -->
+      <div class="reveal relative" style="transition-delay:260ms">
+        <div class="absolute -inset-6 -z-10 rounded-[2rem] bg-forest/10 blur-2xl"></div>
+        <div class="rotate-1 rounded-2xl border border-ink/12 bg-paper/90 p-6 shadow-[0_30px_80px_-40px_rgba(28,61,48,0.55)] backdrop-blur">
+          <div class="flex items-center justify-between border-b border-ink/10 pb-3">
+            <span class="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-ink/50">
+              {lang === "es" ? "Liquidación de sueldo" : "Payslip"}
+            </span>
+            <span class="font-mono text-[0.65rem] text-forest">08 · 2026</span>
+          </div>
+          <div class="mt-4 space-y-2.5 font-mono text-sm">
+            {
+              [
+                [lang === "es" ? "Sueldo base" : "Base salary", "$1.200.000", false],
+                [lang === "es" ? "Gratificación legal" : "Statutory bonus", "$209.396", false],
+                [lang === "es" ? "Total haberes" : "Gross pay", "$1.409.396", true],
+                ["AFP (10,49%)", "−$147.845", false],
+                [lang === "es" ? "Salud (7%)" : "Health (7%)", "−$98.658", false],
+                [lang === "es" ? "Impuesto único" : "Income tax", "−$12.310", false],
+                [lang === "es" ? "Total descuentos" : "Total deductions", "−$258.813", true],
+              ].map(([k, v, strong]) => (
+                <div class={`flex items-center justify-between ${strong ? "border-t border-ink/10 pt-2.5 text-ink" : "text-ink/60"}`}>
+                  <span>{k}</span>
+                  <span class={strong ? "font-medium" : ""}>{v}</span>
+                </div>
+              ))
+            }
+          </div>
+          <div class="mt-4 flex items-center justify-between rounded-lg bg-ink px-4 py-3 text-paper">
+            <span class="font-mono text-[0.7rem] uppercase tracking-[0.18em]">
+              {lang === "es" ? "Líquido a pago" : "Net pay"}
+            </span>
+            <span class="font-display text-xl font-semibold">$1.150.583</span>
+          </div>
+          <p class="mt-3 text-center font-mono text-[0.6rem] uppercase tracking-[0.16em] text-ink/35">
+            {lang === "es" ? "Cifras de ejemplo" : "Illustrative figures"}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="wrap mt-20 grid gap-px overflow-hidden rounded-xl border border-ink/12 bg-ink/12 sm:grid-cols-3">
+      {
+        t.hero.stats.map((s) => (
+          <div class="bg-paper p-6">
+            <p class="font-display text-2xl font-semibold text-forest">{s.value}</p>
+            <p class="mt-1 text-sm text-ink/60">{s.label}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ══ 01 · Problem ═════════════════════════════════════════════ -->
+  <section class="border-t border-ink/10 bg-paper-dim/60 py-20 md:py-28">
+    <div class="wrap">
+      <div class="flex items-baseline gap-5">
+        <span class="font-mono text-sm text-gold">01</span>
+        <p class="eyebrow">{t.problem.eyebrow}</p>
+      </div>
+      <h2 class="reveal mt-4 max-w-3xl font-display text-3xl font-medium leading-tight tracking-[-0.01em] sm:text-[2.6rem]">
+        {t.problem.title}
+      </h2>
+      <div class="mt-14 grid gap-10 md:grid-cols-3">
+        {
+          t.problem.items.map((item, idx) => (
+            <div class="reveal" style={`transition-delay:${idx * 80}ms`}>
+              <div class="rule mb-5" />
+              <h3 class="font-display text-xl font-semibold">{item.title}</h3>
+              <p class="mt-3 text-ink/70 leading-relaxed">{item.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 02 · How it works ═══════════════════════════════════════ -->
+  <section class="py-20 md:py-28">
+    <div class="wrap">
+      <div class="flex items-baseline gap-5">
+        <span class="font-mono text-sm text-gold">02</span>
+        <p class="eyebrow">{t.how.eyebrow}</p>
+      </div>
+      <h2 class="reveal mt-4 max-w-3xl font-display text-3xl font-medium leading-tight tracking-[-0.01em] sm:text-[2.6rem]">
+        {t.how.title}
+      </h2>
+      <ol class="mt-14 space-y-px overflow-hidden rounded-xl border border-ink/12 bg-ink/12">
+        {
+          t.how.steps.map((s) => (
+            <li class="reveal grid gap-4 bg-paper p-7 md:grid-cols-[6rem_1fr_2fr] md:items-baseline md:gap-8 md:p-8">
+              <span class="font-display text-4xl font-light text-forest/40">{s.k}</span>
+              <h3 class="font-display text-xl font-semibold">{s.title}</h3>
+              <p class="text-ink/70 leading-relaxed">{s.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- ══ 03 · Modules ════════════════════════════════════════════ -->
+  <section id="modulos" class="scroll-mt-24 border-t border-ink/10 bg-forest text-paper py-20 md:py-28">
+    <div class="wrap">
+      <div class="flex items-baseline gap-5">
+        <span class="font-mono text-sm text-gold-soft">03</span>
+        <p class="font-mono text-xs uppercase tracking-[0.28em] text-paper/60">{t.modules.eyebrow}</p>
+      </div>
+      <h2 class="reveal mt-4 max-w-3xl font-display text-3xl font-medium leading-tight tracking-[-0.01em] sm:text-[2.6rem]">
+        {t.modules.title}
+      </h2>
+      <p class="reveal mt-5 max-w-prose text-paper/70 leading-relaxed">{t.modules.lead}</p>
+      <div class="mt-14 grid gap-px overflow-hidden rounded-xl border border-paper/15 bg-paper/15 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          t.modules.items.map((m, idx) => (
+            <div class="reveal bg-forest p-7" style={`transition-delay:${(idx % 3) * 70}ms`}>
+              <span class="font-mono text-xs text-gold-soft">{String(idx + 1).padStart(2, "0")}</span>
+              <h3 class="mt-3 font-display text-lg font-semibold">{m.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-paper/70">{m.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 04 · Compliance ═════════════════════════════════════════ -->
+  <section id="cumplimiento" class="scroll-mt-24 py-20 md:py-28">
+    <div class="wrap grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+      <div>
+        <div class="flex items-baseline gap-5">
+          <span class="font-mono text-sm text-gold">04</span>
+          <p class="eyebrow">{t.compliance.eyebrow}</p>
+        </div>
+        <h2 class="reveal mt-4 font-display text-3xl font-medium leading-tight tracking-[-0.01em] sm:text-[2.6rem]">
+          {t.compliance.title}
+        </h2>
+        <p class="reveal mt-5 max-w-prose text-ink/70 leading-relaxed">{t.compliance.lead}</p>
+        <p class="reveal mt-8 border-l-2 border-gold/50 pl-4 text-sm italic text-ink/55">
+          {t.compliance.disclaimer}
+        </p>
+      </div>
+      <ul class="reveal divide-y divide-ink/10 rounded-xl border border-ink/12 bg-paper/70">
+        {
+          t.compliance.points.map((p) => (
+            <li class="flex items-start gap-4 p-5">
+              <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
+              <span class="text-ink/80">{p}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ══ 05 · Security ═══════════════════════════════════════════ -->
+  <section class="border-t border-ink/10 bg-paper-dim/60 py-20 md:py-28">
+    <div class="wrap">
+      <div class="flex items-baseline gap-5">
+        <span class="font-mono text-sm text-gold">05</span>
+        <p class="eyebrow">{t.security.eyebrow}</p>
+      </div>
+      <h2 class="reveal mt-4 max-w-3xl font-display text-3xl font-medium leading-tight tracking-[-0.01em] sm:text-[2.6rem]">
+        {t.security.title}
+      </h2>
+      <div class="mt-14 grid gap-10 md:grid-cols-3">
+        {
+          t.security.items.map((item, idx) => (
+            <div class="reveal" style={`transition-delay:${idx * 80}ms`}>
+              <div class="rule mb-5" />
+              <h3 class="font-display text-xl font-semibold">{item.title}</h3>
+              <p class="mt-3 text-ink/70 leading-relaxed">{item.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 06 · Pricing ════════════════════════════════════════════ -->
+  <section id="planes" class="scroll-mt-24 py-20 md:py-28">
+    <div class="wrap">
+      <div class="flex items-baseline gap-5">
+        <span class="font-mono text-sm text-gold">06</span>
+        <p class="eyebrow">{t.pricing.eyebrow}</p>
+      </div>
+      <h2 class="reveal mt-4 max-w-3xl font-display text-3xl font-medium leading-tight tracking-[-0.01em] sm:text-[2.6rem]">
+        {t.pricing.title}
+      </h2>
+      <p class="reveal mt-5 max-w-prose text-ink/70 leading-relaxed">{t.pricing.lead}</p>
+      <div class="mt-14 grid gap-6 lg:grid-cols-3">
+        {
+          t.pricing.plans.map((plan) => (
+            <div
+              class={`reveal flex flex-col rounded-2xl border p-7 ${
+                plan.featured
+                  ? "border-forest bg-forest text-paper shadow-[0_30px_70px_-40px_rgba(28,61,48,0.7)]"
+                  : "border-ink/12 bg-paper/70"
+              }`}
+            >
+              <h3 class="font-display text-xl font-semibold">{plan.name}</h3>
+              <p class={`mt-3 font-display text-lg ${plan.featured ? "text-gold-soft" : "text-forest"}`}>
+                {plan.price}
+              </p>
+              <p class={`mt-1 text-sm ${plan.featured ? "text-paper/65" : "text-ink/55"}`}>{plan.unit}</p>
+              <ul class={`mt-6 space-y-2.5 text-sm ${plan.featured ? "text-paper/80" : "text-ink/75"}`}>
+                {plan.features.map((f) => (
+                  <li class="flex items-start gap-2.5">
+                    <span class={`mt-1.5 h-1 w-1 shrink-0 rounded-full ${plan.featured ? "bg-gold-soft" : "bg-gold"}`} />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href="#demo"
+                class={`mt-7 ${plan.featured ? "btn bg-paper text-ink hover:bg-gold-soft" : "btn-ghost"}`}
+              >
+                {plan.cta}
+              </a>
+            </div>
+          ))
+        }
+      </div>
+      <p class="reveal mt-6 font-mono text-xs uppercase tracking-[0.16em] text-ink/40">
+        {t.pricing.perSeat}
+      </p>
+    </div>
+  </section>
+
+  <!-- ══ FAQ ═════════════════════════════════════════════════════ -->
+  <section id="preguntas" class="scroll-mt-24 border-t border-ink/10 bg-paper-dim/60 py-20 md:py-28">
+    <div class="wrap grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+      <div>
+        <p class="eyebrow">{t.faq.eyebrow}</p>
+        <h2 class="reveal mt-4 font-display text-3xl font-medium leading-tight tracking-[-0.01em] sm:text-[2.6rem]">
+          {t.faq.title}
+        </h2>
+      </div>
+      <div class="divide-y divide-ink/12 border-y border-ink/12">
+        {
+          t.faq.items.map((f) => (
+            <details class="group py-5">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-lg font-medium">
+                {f.q}
+                <span class="font-mono text-forest transition-transform duration-200 group-open:rotate-45">+</span>
+              </summary>
+              <p class="mt-3 max-w-prose text-ink/70 leading-relaxed">{f.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ Final CTA / form ════════════════════════════════════════ -->
+  <section id="demo" class="scroll-mt-24 bg-ink text-paper py-20 md:py-28">
+    <div class="wrap grid gap-14 lg:grid-cols-[1fr_1fr] lg:items-start">
+      <div>
+        <h2 class="reveal font-display text-3xl font-medium leading-tight tracking-[-0.01em] sm:text-[2.7rem]">
+          {t.finalCta.title}
+        </h2>
+        <p class="reveal mt-5 max-w-prose text-paper/70 leading-relaxed">{t.finalCta.lead}</p>
+      </div>
+
+      <form
+        id="demo-form"
+        method="POST"
+        action={LEADS_ENDPOINT}
+        data-ok={lang === "es" ? "✓ Enviado. Te contactamos pronto." : "✓ Sent. We'll be in touch soon."}
+        data-err={lang === "es" ? "No se pudo enviar. Escríbenos a hola@morfom.cl" : "Could not send. Email us at hola@morfom.cl"}
+        class="reveal grid gap-4"
+      >
+        <input type="hidden" name="source" value="landing" />
+        <input type="hidden" name="lang" value={lang} />
+        <div class="grid gap-4 sm:grid-cols-2">
+          <label class="block">
+            <span class="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-paper/50">{t.finalCta.fields.name}</span>
+            <input name="name" required autocomplete="name" class="mt-1.5 w-full rounded-lg border border-paper/20 bg-paper/5 px-3 py-2.5 text-paper outline-none focus:border-gold-soft" />
+          </label>
+          <label class="block">
+            <span class="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-paper/50">{t.finalCta.fields.company}</span>
+            <input name="company" required autocomplete="organization" class="mt-1.5 w-full rounded-lg border border-paper/20 bg-paper/5 px-3 py-2.5 text-paper outline-none focus:border-gold-soft" />
+          </label>
+          <label class="block">
+            <span class="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-paper/50">{t.finalCta.fields.size}</span>
+            <input name="headcount" inputmode="numeric" class="mt-1.5 w-full rounded-lg border border-paper/20 bg-paper/5 px-3 py-2.5 text-paper outline-none focus:border-gold-soft" />
+          </label>
+          <label class="block">
+            <span class="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-paper/50">{t.finalCta.fields.email}</span>
+            <input name="email" type="email" required autocomplete="email" class="mt-1.5 w-full rounded-lg border border-paper/20 bg-paper/5 px-3 py-2.5 text-paper outline-none focus:border-gold-soft" />
+          </label>
+        </div>
+        <label class="block">
+          <span class="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-paper/50">{t.finalCta.fields.message}</span>
+          <textarea name="message" rows="3" class="mt-1.5 w-full resize-none rounded-lg border border-paper/20 bg-paper/5 px-3 py-2.5 text-paper outline-none focus:border-gold-soft"></textarea>
+        </label>
+        <button type="submit" class="btn bg-gold-soft text-ink hover:bg-paper">{t.finalCta.submit}</button>
+        <p id="form-status" class="hidden font-mono text-xs uppercase tracking-[0.16em]"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ══ Footer ══════════════════════════════════════════════════ -->
+  <footer class="border-t border-ink/10 py-14">
+    <div class="wrap grid gap-10 sm:grid-cols-[1.4fr_1fr_1fr]">
+      <div>
+        <span class="font-display text-lg font-semibold">Mor<span class="text-forest">fom</span></span>
+        <p class="mt-3 max-w-xs text-sm text-ink/55">{t.footer.tagline}</p>
+      </div>
+      <div>
+        <p class="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-ink/40">{t.footer.nav}</p>
+        <ul class="mt-3 space-y-1.5 text-sm text-ink/70">
+          {navItems.map((i) => <li><a href={i.href} class="link-underline">{i.label}</a></li>)}
+          <li><a href={`${APP_URL}/login`} class="link-underline">{t.nav.login}</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-ink/40">{t.footer.legal}</p>
+        <ul class="mt-3 space-y-1.5 text-sm text-ink/70">
+          <li><a href={localizedPath("/privacidad", lang)} class="link-underline">{t.footer.privacy}</a></li>
+          <li><a href={localizedPath("/terminos", lang)} class="link-underline">{t.footer.terms}</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="wrap mt-10 flex flex-col justify-between gap-2 border-t border-ink/10 pt-6 text-xs text-ink/45 sm:flex-row">
+      <span>© {new Date().getFullYear()} Morfom. {t.footer.rights}</span>
+      <span class="font-mono">Santiago · Chile</span>
+    </div>
+  </footer>
+</main>
+
+<script>
+  // Header background on scroll
+  const header = document.getElementById("site-header");
+  const rule = document.getElementById("header-rule");
+  const onScroll = () => {
+    const s = window.scrollY > 16;
+    header?.classList.toggle("bg-paper/85", s);
+    header?.classList.toggle("backdrop-blur", s);
+    rule?.classList.toggle("opacity-100", s);
+  };
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+  // Progressive-enhancement form submit
+  const form = document.getElementById("demo-form") as HTMLFormElement | null;
+  const status = document.getElementById("form-status");
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = form.querySelector("button[type=submit]") as HTMLButtonElement;
+    const data = Object.fromEntries(new FormData(form).entries());
+    btn.disabled = true;
+    try {
+      const res = await fetch(form.action, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      form.reset();
+      if (status) {
+        status.textContent = form.dataset.ok || "✓ Enviado. Te contactamos pronto.";
+        status.className = "font-mono text-xs uppercase tracking-[0.16em] text-gold-soft";
+      }
+    } catch {
+      if (status) {
+        status.textContent = form.dataset.err || "No se pudo enviar. Escríbenos a hola@morfom.cl";
+        status.className = "font-mono text-xs uppercase tracking-[0.16em] text-clay";
+      }
+    } finally {
+      btn.disabled = false;
+    }
+  });
+</script>

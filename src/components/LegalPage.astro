@@ -1,0 +1,66 @@
+---
+import { type Lang, localizedPath } from "../i18n/content";
+import { APP_URL } from "../config";
+
+interface Props {
+  lang: Lang;
+  kind: "privacy" | "terms";
+}
+const { lang, kind } = Astro.props;
+
+const copy = {
+  es: {
+    back: "Volver al inicio",
+    privacy: {
+      title: "Política de privacidad",
+      body: [
+        "Esta es una versión preliminar. Morfom recopila los datos que ingresas en el formulario de contacto (nombre, empresa, número de colaboradores, email y mensaje) con el único fin de responder tu solicitud de demostración.",
+        "No compartimos esa información con terceros ni la usamos para publicidad. Puedes solicitar su eliminación escribiendo a privacidad@morfom.cl.",
+        "El uso de la aplicación Morfom por parte de empresas clientes se rige por el contrato de servicio correspondiente y su anexo de tratamiento de datos.",
+      ],
+    },
+    terms: {
+      title: "Términos de uso",
+      body: [
+        "Esta es una versión preliminar. El contenido de este sitio tiene fines informativos y comerciales y no constituye una oferta contractual vinculante.",
+        "Las cifras, tablas y ejemplos mostrados son ilustrativos. Morfom es una herramienta de gestión de nómina y personas y no reemplaza la asesoría laboral, previsional o contable de cada empresa.",
+        "El acceso a la aplicación requiere un contrato de servicio vigente.",
+      ],
+    },
+  },
+  en: {
+    back: "Back to home",
+    privacy: {
+      title: "Privacy policy",
+      body: [
+        "This is a preliminary version. Morfom collects the data you enter in the contact form (name, company, headcount, email and message) for the sole purpose of responding to your demo request.",
+        "We do not share that information with third parties or use it for advertising. You can request its deletion by writing to privacidad@morfom.cl.",
+        "Use of the Morfom application by client companies is governed by the corresponding service agreement and its data-processing annex.",
+      ],
+    },
+    terms: {
+      title: "Terms of use",
+      body: [
+        "This is a preliminary version. The content of this site is informational and commercial and does not constitute a binding contractual offer.",
+        "Figures, tables and examples shown are illustrative. Morfom is a payroll and people management tool and does not replace each company's labor, pension or accounting advice.",
+        "Access to the application requires an active service agreement.",
+      ],
+    },
+  },
+}[lang];
+
+const page = copy[kind];
+---
+
+<article class="wrap max-w-prose py-28">
+  <a href={localizedPath("/", lang)} class="link-underline font-mono text-xs uppercase tracking-[0.16em] text-forest">
+    ← {copy.back}
+  </a>
+  <h1 class="mt-8 font-display text-4xl font-medium tracking-[-0.01em]">{page.title}</h1>
+  <div class="mt-8 space-y-5 text-ink/75 leading-relaxed">
+    {page.body.map((p) => <p>{p}</p>)}
+  </div>
+  <p class="mt-12 text-sm text-ink/45">
+    <a href={`${APP_URL}/login`} class="link-underline">app.morfom.cl</a>
+  </p>
+</article>
