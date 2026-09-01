@@ -8,10 +8,20 @@ export function getLangFromUrl(url: URL): Lang {
   return defaultLang;
 }
 
-/** Prefix a path with the locale (default locale has no prefix). */
+/** Base URL del sitio ("" en local, "/lading_morfom_rrhh" en GitHub Pages). */
+const BASE = import.meta.env.BASE_URL.replace(/\/+$/, "");
+
+/** Prefix a path with the site base + locale (default locale has no lang prefix). */
 export function localizedPath(path: string, lang: Lang): string {
   const clean = path.startsWith("/") ? path : `/${path}`;
-  return lang === defaultLang ? clean : `/${lang}${clean === "/" ? "" : clean}`;
+  const withLang =
+    lang === defaultLang ? clean : `/${lang}${clean === "/" ? "" : clean}`;
+  return `${BASE}${withLang}`;
+}
+
+/** Resuelve un asset de public/ respetando el base ("/favicon.svg" → "/base/favicon.svg"). */
+export function asset(path: string): string {
+  return `${BASE}/${path.replace(/^\/+/, "")}`;
 }
 
 type Feature = { title: string; body: string };

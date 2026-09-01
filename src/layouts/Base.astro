@@ -1,6 +1,6 @@
 ---
 import "../styles/global.css";
-import { type Lang, content, localizedPath } from "../i18n/content";
+import { type Lang, content, localizedPath, asset } from "../i18n/content";
 
 interface Props {
   lang: Lang;
@@ -17,9 +17,13 @@ const altHref = new URL(localizedPath("/", altLang), Astro.site).href;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={asset("favicon.svg")} />
     <title>{t.meta.title}</title>
     <meta name="description" content={t.meta.description} />
+    {/* El deploy de prueba en GitHub Pages no debe indexarse. */}
+    {import.meta.env.BASE_URL !== "/" && (
+      <meta name="robots" content="noindex, nofollow" />
+    )}
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang={altLang} href={altHref} />
     <link rel="alternate" hreflang={lang} href={canonical} />
@@ -30,7 +34,7 @@ const altHref = new URL(localizedPath("/", altLang), Astro.site).href;
     <meta property="og:description" content={t.meta.description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={lang === "es" ? "es_CL" : "en_US"} />
-    <meta property="og:image" content={new URL("/og.svg", Astro.site).href} />
+    <meta property="og:image" content={new URL(asset("og.svg"), Astro.site).href} />
     <meta name="twitter:card" content="summary_large_image" />
 
     <meta name="theme-color" content="#f7f4ec" />
